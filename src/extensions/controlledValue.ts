@@ -1,5 +1,6 @@
-import { Accessor, createEffect, createMemo, on } from 'solid-js';
-import { EditorView } from '@codemirror/view';
+import { createEffect, createMemo, on } from 'solid-js';
+import type { Accessor} from 'solid-js';
+import type { EditorView } from '@codemirror/view';
 
 /**
  * Makes the view state value controlled.
@@ -8,7 +9,7 @@ import { EditorView } from '@codemirror/view';
  */
 export function createEditorControlledValue(
   view: Accessor<EditorView | undefined>,
-  code: Accessor<string>
+  code: Accessor<string | undefined | null>
 ): void {
   const memoizedCode = createMemo(code);
 
@@ -17,12 +18,12 @@ export function createEditorControlledValue(
       if (!view) return;
       createEffect(
         on(memoizedCode, (code) => {
-          const localValue = view?.state.doc.toString();
+          const localValue = view.state.doc.toString();
           if (localValue === code) return;
           view.dispatch({
             changes: {
               from: 0,
-              to: localValue?.length,
+              to: localValue.length,
               insert: code ?? '',
             },
           });

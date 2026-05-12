@@ -2,6 +2,7 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "noUnusedLocals": true,
+    "moduleResolution": "bundler",
     "sourceMap": true,
     "jsx": "preserve",
     "resolveJsonModule": true,
@@ -10,5 +11,5 @@
     "types": [
       "@types/node"
     ]
-  }
+  },
 }

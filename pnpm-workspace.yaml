@@ -1,2 +1,5 @@
 packages:
   - './'
+  - ./dev
+allowBuilds:
+  unrs-resolver: true

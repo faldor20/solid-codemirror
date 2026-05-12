@@ -1,6 +1,9 @@
 import { createSignal } from 'solid-js';
 import { render } from 'solid-js/web';
-import { createCodeMirror, createLazyCompartmentExtension } from '..';
+import {
+  createCodeMirror,
+  createLazyCompartmentExtension,
+} from 'solid-codemirror';
 import { EditorView, lineNumbers } from '@codemirror/view';
 
 function App() {
