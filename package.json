@@ -7,7 +7,9 @@
   "types": "dist/index.d.ts",
   "private": false,
   "files": [
-    "dist"
+    "dist",
+    "src",
+    "CHANGELOG.md"
   ],
   "exports": {
     ".": {
