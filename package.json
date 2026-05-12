@@ -4,7 +4,7 @@
   "description": "CodeMirror component for SolidJS",
   "type": "module",
   "source": "src/index.tsx",
-  "types": "dist/types/index.d.ts",
+  "types": "dist/index.d.ts",
   "private": false,
   "files": [
     "dist"
@@ -19,15 +19,16 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/riccardoperra/solid-codemirror.git"
+    "url": "git+https://github.com/riccardoperra/solid-codemirror.git"
   },
   "scripts": {
     "build": "tsdown",
     "dev": "cd dev && vite dev",
     "lint": "eslint .",
+    "publint": "pn dlx publint",
     "changeset": "changeset",
-    "version-packages": "changeset version && pnpm i",
-    "build-test": "pnpm build && pnpm test && pnpm typecheck --filter=!./playgrounds/*",
+    "version-packages": "changeset version && pn i",
+    "build-test": "pn build && pnpm test && pn typecheck --filter=!./playgrounds/*",
     "release": "changeset publish",
     "ci:publish": "changeset publish",
     "ci:version": "changeset version"

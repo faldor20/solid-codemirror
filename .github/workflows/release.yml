@@ -38,6 +38,9 @@ jobs:
       - name: Build
         run: pnpm build
 
+      - name: Publint
+        run: pnpm publint
+
       - name: create and publish versions
         uses: changesets/action@v1
         with:
