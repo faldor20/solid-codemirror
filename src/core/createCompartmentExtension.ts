@@ -1,6 +1,8 @@
-import { Compartment, Extension, StateEffect } from '@codemirror/state';
-import { EditorView } from '@codemirror/view';
-import { Accessor, createEffect, on } from 'solid-js';
+import { Compartment, StateEffect } from '@codemirror/state';
+import { createEffect, on } from 'solid-js';
+import type { Extension} from '@codemirror/state';
+import type { EditorView } from '@codemirror/view';
+import type { Accessor} from 'solid-js';
 
 export type CompartmentReconfigurationCallback = (extension: Extension) => void;
 

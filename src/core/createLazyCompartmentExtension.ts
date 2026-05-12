@@ -1,7 +1,8 @@
-import { Accessor, createSignal, onMount } from 'solid-js';
-import { Extension } from '@codemirror/state';
-import { EditorView } from '@codemirror/view';
+import { createSignal, onMount } from 'solid-js';
 import { createCompartmentExtension } from './createCompartmentExtension';
+import type { Accessor} from 'solid-js';
+import type { Extension } from '@codemirror/state';
+import type { EditorView } from '@codemirror/view';
 
 export type LazyCompartmentReconfigurationCallback = {
   loading: boolean;

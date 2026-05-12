@@ -1,6 +1,7 @@
-import { Accessor, createSignal } from 'solid-js';
-import { EditorView, ViewUpdate } from '@codemirror/view';
+import { createSignal } from 'solid-js';
+import { EditorView } from '@codemirror/view';
 import { createCompartmentExtension } from '../core/createCompartmentExtension';
+import type { Accessor} from 'solid-js';
 
 export function createEditorFocus(
   view: Accessor<EditorView | undefined>,

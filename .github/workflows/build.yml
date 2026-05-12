@@ -5,26 +5,21 @@ on: [push]
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
-  release:
-    name: Release
-    runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        node-version: [24]
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v6
+      - name: Install pnpm
+        uses: pnpm/action-setup@8912a9102ac27614460f54aedde9e1e7f9aec20d # v6.0.5
         with:
-          fetch-depth: 0
-
-      - uses: pnpm/action-setup@v2.2.2
-        with:
-          version: 7
-
+          version: 11
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'pnpm'
+          cache: "pnpm"
       - name: Install dependencies
         run: pnpm install
-
-      - name: Build
-        run: pnpm build

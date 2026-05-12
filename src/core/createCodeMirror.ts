@@ -1,14 +1,18 @@
 import {
-  Accessor,
   createEffect,
   createSignal,
   on,
   onCleanup,
-  onMount,
+  onMount
 } from 'solid-js';
-import { EditorView, ViewUpdate } from '@codemirror/view';
-import { EditorState, Extension, Transaction } from '@codemirror/state';
+import { EditorView } from '@codemirror/view';
+import { EditorState } from '@codemirror/state';
 import { createCompartmentExtension as coreCreateCompartmentExtension } from './createCompartmentExtension';
+import type { Extension, Transaction } from '@codemirror/state';
+import type { ViewUpdate } from '@codemirror/view';
+import type {
+  Accessor
+} from 'solid-js';
 
 export interface CreateCodeMirrorProps {
   /**
@@ -47,7 +51,6 @@ export function createCodeMirror(props?: CreateCodeMirrorProps) {
     props?.onModelViewUpdate?.(vu)
   );
 
-  // eslint-disable-next-line solid/reactivity
   localCreateCompartmentExtension(updateListener);
 
   createEffect(
@@ -69,7 +72,7 @@ export function createCodeMirror(props?: CreateCodeMirrorProps) {
             const value = document.toString();
             props?.onValueChange?.(value);
           }
-        },
+        }
       });
 
       onMount(() => setEditorView(currentView));
@@ -91,8 +94,8 @@ export function createCodeMirror(props?: CreateCodeMirrorProps) {
             changes: {
               from: 0,
               to: localValue?.length,
-              insert: props?.value ?? '',
-            },
+              insert: props?.value ?? ''
+            }
           });
         }
       },
@@ -103,6 +106,6 @@ export function createCodeMirror(props?: CreateCodeMirrorProps) {
   return {
     editorView,
     ref: setRef,
-    createExtension: localCreateCompartmentExtension,
+    createExtension: localCreateCompartmentExtension
   } as const;
 }
