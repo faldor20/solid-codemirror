@@ -1,5 +1,5 @@
 import { Compartment, StateEffect } from '@codemirror/state';
-import { createEffect, on } from 'solid-js';
+import { createEffect } from 'solid-js';
 import type { Extension} from '@codemirror/state';
 import type { EditorView } from '@codemirror/view';
 import type { Accessor} from 'solid-js';
@@ -34,21 +34,22 @@ export function createCompartmentExtension(
     typeof extension === 'function' ? extension : () => extension;
 
   createEffect(
-    on(
-      [view, $extension],
-      ([view, extension]) => {
-        if (view && extension) {
-          if (compartment.get(view.state)) {
-            reconfigure(extension);
-          } else {
-            view.dispatch({
-              effects: StateEffect.appendConfig.of(compartment.of(extension)),
-            });
-          }
+    () => [view(), $extension()] as const,
+    ([view, extension]) => {
+      if (view && extension) {
+        // Use the `view` resolved in the compute phase — calling `reconfigure`
+        // here would re-read the reactive `view()` accessor inside this untracked
+        // apply callback (Solid 2.0 STRICT_READ_UNTRACKED).
+        if (compartment.get(view.state)) {
+          view.dispatch({ effects: compartment.reconfigure(extension) });
+        } else {
+          view.dispatch({
+            effects: StateEffect.appendConfig.of(compartment.of(extension)),
+          });
         }
-      },
-      { defer: true }
-    )
+      }
+    },
+    { defer: true }
   );
 
   return reconfigure;

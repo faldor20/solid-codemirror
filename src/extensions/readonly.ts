@@ -1,4 +1,4 @@
-import { createEffect, on, untrack } from 'solid-js';
+import { createEffect, untrack } from 'solid-js';
 import { EditorView } from '@codemirror/view';
 import { createCompartmentExtension } from '../core/createCompartmentExtension';
 import type { Accessor} from 'solid-js';
@@ -24,6 +24,7 @@ export function createEditorReadonly(
   );
 
   createEffect(
-    on(readOnly, (readOnly) => reconfigure(getReadOnlyExtensions(readOnly)))
+    () => readOnly(),
+    (readOnly) => reconfigure(getReadOnlyExtensions(readOnly))
   );
 }

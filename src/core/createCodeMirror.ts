@@ -1,9 +1,6 @@
 import {
   createEffect,
-  createSignal,
-  on,
-  onCleanup,
-  onMount
+  createSignal
 } from 'solid-js';
 import { EditorView } from '@codemirror/view';
 import { EditorState } from '@codemirror/state';
@@ -39,7 +36,10 @@ export interface CreateCodeMirrorProps {
  */
 export function createCodeMirror(props?: CreateCodeMirrorProps) {
   const [ref, setRef] = createSignal<HTMLElement>();
-  const [editorView, setEditorView] = createSignal<EditorView>();
+  const [editorView, setEditorView] = createSignal<EditorView | undefined>(
+    undefined,
+    { ownedWrite: true }
+  );
 
   function localCreateCompartmentExtension(
     extension: Extension | Accessor<Extension | undefined>
@@ -54,16 +54,16 @@ export function createCodeMirror(props?: CreateCodeMirrorProps) {
   localCreateCompartmentExtension(updateListener);
 
   createEffect(
-    on(ref, (ref) => {
+    () => ref(),
+    (ref) => {
+      if (!ref) return;
       const state = EditorState.create({ doc: props?.value ?? '' });
       const currentView = new EditorView({
         state,
         parent: ref,
         // Replace the old `updateListenerExtension`
-        dispatch: (transaction, editorView) => {
-          if (props?.onTransactionDispatched) {
-            props.onTransactionDispatched(transaction, editorView);
-          }
+        dispatch: (transaction) => {
+          props?.onTransactionDispatched?.(transaction, currentView);
 
           currentView.update([transaction]);
 
@@ -75,32 +75,30 @@ export function createCodeMirror(props?: CreateCodeMirrorProps) {
         }
       });
 
-      onMount(() => setEditorView(currentView));
+      setEditorView(currentView);
 
-      onCleanup(() => {
-        editorView()?.destroy();
+      return () => {
+        currentView.destroy();
         setEditorView(undefined);
-      });
-    })
+      };
+    }
   );
 
   createEffect(
-    on(
-      editorView,
-      (editorView) => {
-        const localValue = editorView?.state.doc.toString();
-        if (localValue !== props?.value && !!editorView) {
-          editorView.dispatch({
-            changes: {
-              from: 0,
-              to: localValue?.length,
-              insert: props?.value ?? ''
-            }
-          });
-        }
-      },
-      { defer: true }
-    )
+    () => editorView(),
+    (editorView) => {
+      const localValue = editorView?.state.doc.toString();
+      if (localValue !== props?.value && !!editorView) {
+        editorView.dispatch({
+          changes: {
+            from: 0,
+            to: localValue?.length,
+            insert: props?.value ?? ''
+          }
+        });
+      }
+    },
+    { defer: true }
   );
 
   return {
