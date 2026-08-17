@@ -6,7 +6,7 @@
     "sourceMap": true,
     "jsx": "preserve",
     "resolveJsonModule": true,
-    "jsxImportSource": "solid-js",
+    "jsxImportSource": "@solidjs/web",
     "preserveSymlinks": true,
     "types": [
       "@types/node"
